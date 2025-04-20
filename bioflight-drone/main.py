@@ -1,94 +1,122 @@
+# main.py (or rename to run_simulation.py)
+import gym
 import numpy as np
-import matplotlib.pyplot as plt
-import json
-import os
-from utils import load_test_cases
-# Step 1: Define the behavior patterns
-# Each behavior is a binary pattern (-1, 1)
+import time
+import yaml # For config loading
 
-'''We stored 5 binary behavior patterns: glide, flap, turn_left, turn_right, soar.
+# Import simulation environment (ensure it's installed)
+try:
+    # Using TakeoffAviary as an example environment
+    from gym_pybullet_drones.envs.single_agent_rl import TakeoffAviary
+    from gym_pybullet_drones.utils.enums import DroneModel, Physics
+except ImportError as e:
+    print("*"*80)
+    print(f"Error importing gym_pybullet_drones: {e}")
+    print("Please ensure 'gym-pybullet-drones' is installed correctly.")
+    print("Try: pip install -e external/gym-pybullet-drones")
+    print("*"*80)
+    exit()
 
-train the Hopfield network using Hebbian learning.
+# Import agent
+from agents.drone_agent import DroneAgent
 
-test the network with a noisy version of "glide": [1, -1, -1, 1, -1] (notice the 4th bit is flipped).
+# --- Configuration Loading ---
+def load_config(config_path="config/config.yaml"):
+    """Loads configuration from a YAML file."""
+    try:
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        print(f"Loaded configuration from {config_path}")
+        return config
+    except FileNotFoundError:
+        print(f"Error: Configuration file not found at {config_path}")
+        # Return a default config or exit
+        return None # Or raise error
+    except Exception as e:
+        print(f"Error loading configuration: {e}")
+        return None # Or raise error
 
-The network iterated and converged to a final state: [-1, -1, -1, -1, -1].'''
-
-patterns = {
-    "glide":      np.array([1, -1, -1, -1, -1]),
-    "flap":       np.array([-1, 1, -1, -1, -1]),
-    "turn_left":  np.array([-1, -1, 1, -1, -1]),
-    "turn_right": np.array([-1, -1, -1, 1, -1]),
-    "soar":       np.array([-1, -1, -1, -1, 1])
-}
-
-def train_hopfield(patterns):
-    size = len(next(iter(patterns.values())))
-    W = np.zeros((size, size))
-    for pattern in patterns.values():
-        W += np.outer(pattern, pattern)
-    np.fill_diagonal(W, 0)
-    return W
-
-def energy(state, W):
-    return -0.5 * state @ W @ state.T
-
-def run_hopfield(W, input_pattern, max_iter=10):
-    state = input_pattern.copy()
-    energy_trace = [energy(state, W)]
-    for _ in range(max_iter):
-        for i in range(len(state)):
-            raw = np.dot(W[i], state)
-            state[i] = 1 if raw >= 0 else -1
-        current_energy = energy(state, W)
-        energy_trace.append(current_energy)
-        if energy_trace[-1] == energy_trace[-2]:
-            break
-    return state, energy_trace
-
-def identify_pattern(state, patterns):
-    for name, pattern in patterns.items():
-        if np.array_equal(state, pattern):
-            return name
-    return "Unknown"
-
+# --- Main Simulation Runner ---
 def main():
-    # Define behavior patterns (can be modular later)
-    patterns = {
-        "glide":      np.array([1, -1, -1, -1, -1]),
-        "flap":       np.array([-1, 1, -1, -1, -1]),
-        "turn_left":  np.array([-1, -1, 1, -1, -1]),
-        "turn_right": np.array([-1, -1, -1, 1, -1]),
-        "soar":       np.array([-1, -1, -1, -1, 1])
-    }
+    # Load Config
+    config = load_config()
+    if config is None:
+        print("Exiting due to configuration error.")
+        return
 
-    # Train the Hopfield network
-    W = train_hopfield(patterns)
+    sim_config = config.get('simulation', {})
+    agent_config = config.get('agent', {})
+    agent_config['patterns_path'] = config.get('patterns_path', 'data/behavior_patterns.json') # Add pattern path to config
 
-    # Load test cases from JSON
-    test_cases = load_test_cases("test_inputs.json")
+    # Initialize Simulation Environment
+    print("Initializing simulation environment...")
+    try:
+        # Map string config values to Enums if necessary
+        drone_model_enum = DroneModel(sim_config.get('drone_model', 'cf2x'))
+        physics_enum = Physics(sim_config.get('physics', 'pyb'))
 
-    # Run each test case through the network
-    for test in test_cases:
-        label = test["label"]
-        test_input = np.array(test["input"])
+        env = TakeoffAviary(
+            drone_model=drone_model_enum,
+            initial_xyzs=np.array([sim_config.get('initial_pos', [0, 0, 0.1])]),
+            physics=physics_enum,
+            freq=sim_config.get('sim_freq', 240),
+            aggregate_phy_steps=sim_config.get('ctrl_freq_divisor', 5), # ctrl_freq = sim_freq / divisor
+            gui=sim_config.get('gui', True),
+            record=sim_config.get('record', False)
+        )
+        print(f"Control Frequency: {env.CTRL_FREQ} Hz")
+    except Exception as e:
+        print(f"Error initializing environment: {e}")
+        return
 
-        final_state, energy_trace = run_hopfield(W, test_input)
-        matched_behavior = identify_pattern(final_state, patterns)
+    # Initialize Agent
+    print("Initializing drone agent...")
+    agent = DroneAgent(agent_config)
 
-        print(f"\nTest Case: {label}")
-        print("Input:", test_input)
-        print("Final State:", final_state)
-        print("Predicted Behavior:", matched_behavior)
+    # Simulation Loop
+    print("Starting simulation loop...")
+    obs = env.reset()
+    start_time = time.time()
+    total_reward = 0
+    step = 0
+    done = False
 
-        # Plot energy convergence
-        plt.plot(energy_trace)
-        plt.xlabel("Iteration")
-        plt.ylabel("Energy")
-        plt.title(f"Energy Convergence: {label}")
-        plt.grid(True)
-        plt.show()
+    try:
+        while not done:
+            # 1. Agent chooses action based on observation
+            action = agent.choose_action(obs)
 
-# Python entry point
+            # 2. Step the environment with the agent's action
+            obs, reward, done, info = env.step(action)
+            total_reward += reward
+
+            # 3. Render (optional) & Logging
+            if sim_config.get('render', True): # Add render option to config
+                 env.render()
+
+            print(f"Step: {step}, Reward: {reward:.3f}, Total Reward: {total_reward:.3f}, Done: {done}")
+            step += 1
+
+            # Sync to simulation frequency if GUI is enabled
+            if sim_config.get('gui', True):
+                sync_freq = env.CTRL_FREQ # Sync to control frequency
+                time.sleep(max(0, 1./sync_freq - (time.time() - start_time) % (1./sync_freq) ))
+
+            # Optional: Check max duration
+            duration_sec = sim_config.get('duration_sec', None)
+            if duration_sec and (time.time() - start_time > duration_sec):
+                print("Max duration reached.")
+                done = True
+
+    except KeyboardInterrupt:
+        print("\nSimulation interrupted by user.")
+    finally:
+        # Clean up
+        env.close()
+        print("-" * 50)
+        print(f"Simulation Finished. Total steps: {step}, Total reward: {total_reward:.3f}")
+        print("-" * 50)
+
+
 if __name__ == "__main__":
     main()

@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  bioflight:
+    build: .
+    container_name: bioflight-gpu
+    tty: true
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    volumes:
+      - .:/bioflight-drone
+    working_dir: /bioflight-drone

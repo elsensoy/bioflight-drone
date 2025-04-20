@@ -1,0 +1,12 @@
+Summary of Changes & Next Steps:
+github repo created.
+explanations, debugging options, testing, docker file added.
+Hopfield logic is now in its own class.
+Agent: A DroneAgent uses the Hopfield memory.
+main.py sets up the simulation and runs the agent-environment loop.
+Settings are externalized to config.yaml.
+TODO: Must implement the logic within _map_observation_to_pattern and _map_behavior_to_action in agents/drone_agent.py. This is the core challenge of connecting abstract memory to the concrete simulation. 
+ 
+Experiment next: Run python main.py (or python run_simulation.py) and debug the interaction between the agent and the simulation. Observe the drone's behavior based on the recalled patterns.
+Iterate: improve on/refine the state-to-pattern mapping, action mapping, and potentially the Hopfield patterns themselves based on simulation results. Consider the 5-bit patterns are sufficient or not (well, they aren't). Needs more complex representation.
+Add research links, documentation//

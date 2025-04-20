@@ -1,0 +1,19 @@
+# config/config.yaml
+
+patterns_path: data/behavior_patterns.json # Path to your behavior definitions
+
+simulation:
+  drone_model: cf2x  # Options: cf2x, cf2p, hb (see gym-pybullet-drones)
+  physics: pyb     # Options: pyb, dyn, pyb_gnd_effect, pyb_drag, pyb_dw, pyb_gnd_effect_drag_dw
+  initial_pos: [0, 0, 0.1] # Starting X, Y, Z
+  sim_freq: 240       # Physics simulation frequency (Hz)
+  ctrl_freq_divisor: 5 # Control frequency = sim_freq / ctrl_freq_divisor
+  gui: true           # Show PyBullet GUI
+  record: false         # Record video
+  render: true          # Call env.render() in loop
+  duration_sec: 15      # Maximum simulation time in seconds (null for unlimited)
+
+agent:
+  # Add agent-specific parameters here if needed later
+  # e.g., learning rates, exploration parameters for RL agents
+  hopfield_max_iter: 20 # Max iterations for Hopfield recall
