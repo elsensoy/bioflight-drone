@@ -36,14 +36,8 @@ This approach enables the drone not merely to imitate biological motion, but to 
 -   Incorporate Riemannian geometry to understand and leverage the underlying structure (shape, curvature) of drone motion.
 -   Develop control strategies with provable stability guarantees using Lyapunov theory.
 
----
-Here's your full **Mathematical Foundation** section formatted for a `README.md` file using **GitHub-flavored Markdown**, including math expressions. On GitHub, LaTeX math isn't rendered natively without extensions, so you can:
+![BioFlight-Drone Low-Level Diagram](imgs/poly-img1.png)
 
-- Use **inline math** with backticks (`$...$`) for clarity.
-- Convert **block math** to `code blocks` with a visual hint (`$$ ... $$`), or use images for visual equations later.
-- Or use [MathJax in a documentation site](https://docs.readthedocs.io/en/stable/guides/math-guide.html) or Jupyter for full LaTeX rendering.
-
----
 
 ##  Mathematical Foundation
 
