@@ -10,3 +10,5 @@ TODO: Must implement the logic within _map_observation_to_pattern and _map_behav
 Experiment next: Run python main.py (or python run_simulation.py) and debug the interaction between the agent and the simulation. Observe the drone's behavior based on the recalled patterns.
 Iterate: improve on/refine the state-to-pattern mapping, action mapping, and potentially the Hopfield patterns themselves based on simulation results. Consider the 5-bit patterns are sufficient or not (well, they aren't). Needs more complex representation.
 Add research links, documentation//
+
+

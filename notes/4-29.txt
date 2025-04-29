@@ -1,0 +1,18 @@
+Summary of changes & next steps:
+
+Installed the project on ubuntu dual system.
+The setup guide is updated.
+Requirements.txt explanation is added. 
+TODO-1 added.
+
+What to do next:
+study research paper Spectro-Riemannian Graph Neural Networks. A key component to the algorithm.
+Test cases should be more comprehensive. 
+
+
+https://blogs.nvidia.com/blog/what-are-graph-neural-networks/#:~:text=Graph%20neural%20networks%20apply%20the,nodes%2C%20edges%20or%20entire%20graphs.
+
+https://www.arxiv.org/abs/2502.00401
+
+https://proceedings.mlr.press/v162/du22d/du22d.pdf
+

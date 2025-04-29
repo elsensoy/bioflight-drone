@@ -178,60 +178,203 @@ bioflight-drone/
 ```
 
 ---
+Explanation of required packagese:
 
-## Setup and Installation
 
-### 1. Clone the Repository
+| Package | Why |
+|:--|:--|
+| numpy | Math operations, tensor calculations |
+| scipy | Advanced math (e.g., optimization, interpolation) |
+| torch | Hopfield networks and EBM deep learning models |
+| pybullet | Physics simulation for drones |
+| matplotlib | Plotting and analyzing flight data or memory training |
+| jax, jaxlib | Physics-informed learning, energy-based optimization (modern ML acceleration) |
+| tqdm | Progress bars during training |
+| gym | Standard environment API (needed by `gym-pybullet-drones`) |
+| gym-notices | Extra dependency required for newer OpenAI Gym versions |
+ 
+You should also pin gym to 0.26.2 because gym-pybullet-drones is compatible with that version, NOT with the very latest Gymnasium versions.
+Also remember external/cusp has its own requirements.txt, so you’ll install that separately.
+
+---
+
+## Quick Start
+
+# BioFlight-Drone Project Setup Guide
+
+This guide will walk you through setting up and running the **BioFlight-Drone** project on your local machine (Ubuntu/Linux).
+
+---
+
+## 1. Install Miniconda (Python Environment Manager)
+
+First, install **Miniconda** manually:
 
 ```bash
-git clone [https://github.com/yourusername/drone_poly.git](https://github.com/yourusername/drone_poly.git)
-cd drone_poly
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm ~/miniconda3/miniconda.sh
 ```
 
-### 2. Create Conda Environment
+**Then add Miniconda to your PATH**:
 
-It is recommended to use a Conda environment to manage dependencies.
+- If using **bash**:
+  ```bash
+  echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.bashrc
+  source ~/.bashrc
+  ```
+- If using **zsh**:
+  ```bash
+  echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.zshrc
+  source ~/.zshrc
+  ```
 
+After that, check:
+```bash
+conda --version
+```
+
+---
+
+## 2. Fix PYTHONPATH Warning (If Exists)
+
+If you see a warning like:
+> You currently have a PYTHONPATH environment variable set.
+
+Temporarily fix it:
+```bash
+unset PYTHONPATH
+```
+
+Or check your `~/.bashrc` or `~/.zshrc` to remove any `export PYTHONPATH=...` lines, then reload:
+```bash
+source ~/.bashrc   # or ~/.zshrc
+```
+
+Now Conda environments will be isolated properly.
+
+---
+
+## 3. Initialize Conda for Shell
+
+Set up Conda initialization:
+```bash
+~/miniconda3/bin/conda init zsh   # for zsh
+# or
+~/miniconda3/bin/conda init bash  # for bash
+```
+
+Reload shell:
+```bash
+source ~/.zshrc   # or ~/.bashrc
+```
+
+Confirm Conda is ready:
+```bash
+conda --version
+```
+
+---
+
+## 4. First-Time Conda Configuration (Recommended)
+
+Optimize Conda setup for better performance:
+
+```bash
+conda config --set auto_activate_base false
+conda update -n base -c defaults conda
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+```
+
+**Tiny Tips:**
+- `auto_activate_base false` keeps your terminal clean (no auto-activation of "base").
+- `conda-forge` gives faster updates and broader package support.
+- Use `mamba` if you want extremely fast installs:
+  ```bash
+  conda install mamba -n base -c conda-forge
+  ```
+
+---
+
+## 5. Setup BioFlight-Drone Project
+
+### Clone the Repository
+```bash
+git clone https://github.com/elsensoy/bioflight-drone.git
+cd bioflight-drone
+```
+
+### Create and Activate Environment
 ```bash
 conda create -n bioflight python=3.10 -y
 conda activate bioflight
 ```
 
-### 3. Install Python Dependencies
-
-Install the required Python packages from `requirements.txt`.
-
+### Install Main Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Initialize External Dependencies (Git Submodules)
-
-This project relies on external libraries included as Git submodules.
-
+### Initialize Submodules
 ```bash
 git submodule update --init --recursive
 ```
 
-This will clone `gym-pybullet-drones` and `cusp` into the `external/` directory.
-
-### 5. Install Submodule Dependencies
-
-Install dependencies specific to the submodules.
-
+### Install Submodule-Specific Dependencies
 ```bash
-# Install CUSP requirements
 cd external/cusp
 pip install -r requirements.txt
-cd ../.. # Return to the project root directory
+cd ../..
+```
 
-# gym-pybullet-drones typically installs with the main requirements.txt
-# If needed, follow installation instructions in external/gym-pybullet-drones/README.md
+`gym-pybullet-drones` usually installs through the main `requirements.txt`.
+
+---
+
+## 6. Quick Start Commands
+
+| Step | Command |
+|:--|:--|
+| Activate environment | `conda activate bioflight` |
+| CD into project | `cd ~/bioflight-drone` |
+| Pull submodules | `git submodule update --init --recursive` |
+| Install CUSP deps | `cd external/cusp && pip install -r requirements.txt && cd ../..` |
+| Test Hopfield memory | `python training/train_memory.py` |
+| Train energy model | `python training/train_energy_model.py` |
+| Run drone simulation | `python simulation/pybullet_wrapper.py` |
+
+If you see missing libraries like `pybullet` or `torch`, fix it with:
+```bash
+pip install pybullet torch
 ```
 
 ---
 
-## Quick Start
+## 7. Optional: Useful Alias Setup
+
+To simplify your project setup every time you open a terminal, you can add this to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+alias start_bioflight='unset PYTHONPATH && conda activate bioflight && cd ~/bioflight-drone'
+```
+
+Then just run:
+```bash
+start_bioflight
+```
+
+---
+
+# Congratulations!
+You're now ready to work on **BioFlight-Drone** — training Hopfield networks, energy-based models, and simulating drone flights!
+
+---
+
+If you encounter issues, feel free to reach me at elsensoy@umich.edu and troubleshoot Conda environments first or check for missing dependencies inside the project.
+
+
 
 ### 1. Test Hopfield Memory
 

@@ -1,0 +1,94 @@
+    imulation Wrapper (simulation/pybullet_wrapper.py)
+        Goal: Create a clean interface to the gym-pybullet-drones environment.
+        Implementation:
+            Create a PybulletDroneEnv class.
+            Initialize the underlying gym-pybullet-drones environment (e.g., Aviary).
+            Implement reset(): Resets the environment and returns the initial observation (state).
+            Implement step(action): Applies an action (e.g., RPM commands for 4 motors), steps the simulation, and returns (observation, reward, done, info). Define your action space clearly.
+            Implement get_state(): Returns a structured representation of the drone's state (position, orientation (quaternion/Euler), linear/angular velocities).
+            Implement render() (optional, for visualization).
+            Consider adding methods to get specific environment properties (e.g., wind conditions if simulated).
+        Testing:
+            Run the script directly (e.g., python simulation/pybullet_wrapper.py).
+            Instantiate the wrapper.
+            Call reset().
+            Apply some dummy actions in a loop using step().
+            Print the observations/states to ensure they make sense.
+            Try rendering the simulation.
+
+    Energy-Based Model (models/energy_model.py)
+        Goal: Predict the composite energy Etotal​ for state-action pairs or short trajectories.
+        Implementation:
+            Use PyTorch to define a neural network (e.g., an MLP).
+            Input: Drone state (from pybullet_wrapper), proposed action, potentially environmental context (wind, etc.).
+            Output: A single scalar value representing predicted Etotal​.
+            Define the loss function. This requires target energy values. How do you get these?
+                Option A (Simulation-based): Run simulations with known controllers or random actions. Calculate the actual energy consumed (e.g., based on motor RPMs, physics formulas for drag) and any deviation from desired behaviors (e.g., distance from a target trajectory, Hopfield energy of the state) after the fact. This becomes your training data: (state, action, context) -> calculated_E_total.
+                Option B (Physics-Informed): Define analytical formulas for Ehardware​ (motor power models) and Eenvironment​ (aerodynamic drag models). Ebehavior​ could be a measure of deviation from a Hopfield attractor state or a target kinematic state. Train the EBM to predict the sum α∗Ebehavior​+β∗Ehardware​+γ∗Eenvironment​.
+        Training (training/train_energy_model.py):
+            Load or generate training data (state-action-context -> energy). This is crucial and might require significant simulation effort.
+            Implement a standard PyTorch training loop (forward pass, loss calculation, backward pass, optimizer step).
+            Use appropriate data loaders (utils/data_loader.py).
+            Save the trained model weights.
+        Testing: Evaluate the EBM's predictions on a separate test dataset. Check if it correctly ranks actions/trajectories by their expected energy cost.
+
+Phase 2: Integration and Control
+
+    Drone Agent (agents/drone_agent.py)
+        Goal: Use the trained models to select energy-efficient actions.
+        Implementation:
+            Create a DroneAgent class.
+            Load the trained Hopfield network (optional, for behavioral guidance) and EBM.
+            Implement the select_action(state, context) method:
+                Action Generation: Generate a set of candidate actions (e.g., sample from the action space, or use a policy network if doing RL).
+                Energy Prediction: For each candidate action, predict the resulting next state (could be a simple physics model or just use the action itself) and use the EBM to predict Etotal​ for the (state, candidate_action, context) tuple.
+                Action Selection: Choose the action that minimizes the predicted Etotal​. This is a form of model-predictive control (MPC) or greedy energy minimization.
+                (Advanced): Incorporate Hopfield recall. Maybe the agent tries to move towards a state that is closer to a recalled Hopfield attractor, with the EBM evaluating the cost of doing so.
+        Testing: Unit test the select_action method with mock states, contexts, and EBM predictions.
+
+    Main Execution Loop (main.py or integrate into simulation/pybullet_wrapper.py)
+        Goal: Run the closed-loop system: Agent interacts with Environment.
+        Implementation:
+            Initialize the PybulletDroneEnv.
+            Initialize the DroneAgent.
+            Loop:
+                state = env.get_state()
+                context = env.get_context() (if applicable)
+                action = agent.select_action(state, context)
+                observation, reward, done, info = env.step(action)
+                env.render() (optional)
+                Log data (state, action, reward, predicted energy, actual energy if calculable) for analysis.
+                If done, env.reset().
+        Testing: Run the full simulation. Observe the drone's behavior. Does it appear to seek low-energy states (e.g., gliding when possible)? Analyze the logged data.
+
+Phase 3: Advanced Features
+
+    Riemannian Geometry (models/riemannian_net.py with CUSP)
+        Goal: Analyze and classify trajectory shapes.
+        Implementation:
+            Requires trajectory data (sequences of states) from simulations.
+            Preprocess trajectories into graph formats suitable for CUSP. Nodes could be states, edges represent time steps. Node features = state vectors.
+            Define the product manifold structure in CUSP based on your state representation (e.g., position in R3, orientation on S3 or SO(3)).
+            Build a PyTorch model using CUSP's Spectro-Riemannian GNN layers.
+            Train the model for a specific task:
+                Classification: Label trajectories (e.g., 'takeoff', 'hover', 'glide', 'erratic') and train the GNN to classify them based on their geometric shape.
+                Clustering: Use embeddings from the GNN to cluster trajectories.
+        Integration: The output of this model could potentially inform the DroneAgent's high-level strategy (e.g., recognizing it's in a 'glide' phase and biasing actions accordingly) or be used for offline analysis.
+        Testing: Train and evaluate the GNN on a labeled trajectory dataset. Visualize embeddings (e.g., using t-SNE).
+
+    Lyapunov Stability
+        Goal: Ensure convergence to stable, low-energy states.
+        Implementation: This is challenging.
+            Analysis: Define a desired stable state x∗ (e.g., stable hover, constant velocity glide). Define a candidate Lyapunov function V(x) (e.g., related to the EBM energy or distance to x∗). Analyze if the control policy from the DroneAgent makes V˙(x)=∇V(x)Tf(x,π(x)) negative definite near x∗.
+            Synthesis (Control Barrier Functions - CBFs): Define safety or stability constraints (e.g., stay within a velocity range, keep energy below a threshold). Modify the action selection in DroneAgent to ensure these constraints are always met, potentially overriding the pure energy minimization goal if needed. This often involves solving a small optimization problem (Quadratic Program) at each time step.
+            Learning: Learn a control policy and a Lyapunov function simultaneously, often within an RL framework, ensuring the stability conditions are met.
+        Testing: Requires careful simulation and analysis to verify that the system reliably returns to the desired stable state after perturbations.
+
+GPU and Docker:
+
+    Follow the instructions in the README for building and running the Docker container. This is highly recommended for reproducibility, especially with GPU dependencies.
+    Ensure your PyTorch code correctly utilizes the GPU (.to(device)) for models and data during training and potentially inference (if EBM prediction is computationally intensive).
+
+Recommendations:
+
+    Start Simple: Implement the core components (Hopfield, PyBullet Wrapper, basic EBM, simple Agent) first. Get a basic simulation running where the drone takes some action based on a very simple energy prediction.
