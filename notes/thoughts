@@ -1,0 +1,8 @@
+Consider Alternatives (PyBullet + Jetson):
+
+    could still use PyBullet for initial development and training.
+    Train models (EBM, perception, agent).
+    Develop ROS 2 nodes.
+    Optimize the models for the Jetson using TensorRT.
+    Deploy and test on the Jetson.
+    Isaac Sim might face a larger sim-to-real gap, potentially requiring more tuning on the real hardware.

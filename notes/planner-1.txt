@@ -50,7 +50,7 @@ Implementation plan:
             Define a small set of distinct binary patterns (e.g., representing basic maneuvers) in data/test_inputs.json or generate them.
             Train the network on these patterns.
             Test recall by providing noisy versions of the patterns and verifying convergence to the originals.
-            Visualize the energy landscape descent during recall (optional).
+            Visualize the energy landscape descent during recall.
 
 PART 2:
 

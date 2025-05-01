@@ -8,7 +8,7 @@ TODO-1 added.
 What to do next:
 study research paper Spectro-Riemannian Graph Neural Networks. A key component to the algorithm.
 Test cases should be more comprehensive. 
-
+Switch to Isaac sim as it is more compatible with nvidia (and i can find free tutorials)
 
 https://blogs.nvidia.com/blog/what-are-graph-neural-networks/#:~:text=Graph%20neural%20networks%20apply%20the,nodes%2C%20edges%20or%20entire%20graphs.
 

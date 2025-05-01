@@ -1,0 +1,53 @@
+Consider Alternatives (PyBullet + Jetson):
+
+    could still use PyBullet for initial development and training.
+    Train models (EBM, perception, agent).
+    Develop ROS 2 nodes.
+    Optimize the models for the Jetson using TensorRT.
+    Deploy and test on the Jetson.
+    Isaac Sim might face a larger sim-to-real gap, potentially requiring more tuning on the real hardware.
+
+a Lyapunov function is a special scalar function defined on the state space of the system. Its key property is that its value decreases (or at least does not increase) along the trajectories of the system as it evolves over time. If you can find such a function for a system, it proves that the system will eventually settle into some stable state (an equilibrium point or attractor) where the function's value is locally minimal.
+
+
+The energy function creates an "energy landscape" over the space of all possible network states. The stored patterns (and potentially some spurious states) correspond to the valleys or local minima in this landscape. During the recall process, the network state updates in a way that (typically) decreases the energy, effectively "rolling downhill" into the nearest attractor basin
+The energy method calculates this using PyTorch tensor operations
+
+The Hopfield energy function was specifically constructed (or identified) because it has this Lyapunov property with respect to the network's update rule. It provides a mathematical guarantee that the network will converge to a stable state, making it useful for tasks like pattern completion and noise reduction, as the network naturally "settles" into the nearest learned memory (energy minimum). The recall function simulates this "settling" process.
+
+
+################################################################################
+output error:
+python training/train_memory.py
+
+(bioflight) ➜  elida-Latitude-5400 at /home/elida/bioflight-drone on git:(main) * python training/train_memory.py
+Using PyTorch implementation.
+Using device: cpu
+Successfully loaded patterns from /home/elida/bioflight-drone/models/data/test_inputs.json
+Detected pattern size: 8
+Initialized HopfieldNetworkPyTorch on device: cpu
+
+--- Training Network ---
+Training complete. Stored 4 patterns.
+
+--- Testing Recall ---
+
+Testing recall for: 'glide_noisy' (should recall 'glide')
+  Converged: True in 2 steps.
+Traceback (most recent call last):
+  File "/home/elida/.local/lib/python3.10/site-packages/numpy/_core/arrayprint.py", line 34, in <module>
+    from . import numerictypes as _nt
+  File "/home/elida/.local/lib/python3.10/site-packages/numpy/_core/numerictypes.py", line 102, in <module>
+    from ._type_aliases import (
+  File "/home/elida/.local/lib/python3.10/site-packages/numpy/_core/_type_aliases.py", line 38, in <module>
+    allTypes[_abstract_type_name] = getattr(ma, _abstract_type_name)
+AttributeError: module 'numpy.core.multiarray' has no attribute 'inexact'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/elida/bioflight-drone/training/train_memory.py", line 143, in <module>
+    print(f"  Final State: {final_state_np}")
+RuntimeError: Unable to configure default ndarray.__str__
+(bioflight) ➜  elida-Latitude-5400 at /home/elida/bioflight-drone on git:(main) * 
+(bioflight) ➜  elida-Latitude-5400 at /home/elida/bioflight-drone on git:(main) * 

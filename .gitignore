@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Conda environment
+.env
+.venv
+env/
+venv/
+bioflight-env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and outputs
+*.log
+*.out
+*.pid
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data and models
+data/
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+
+# Simulation temp files
+*.mp4
+*.gif
+*.avi
+*.png
+
+# Editor-specific
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git submodules (already tracked)
+external/*/logs/
+external/*/__pycache__/
+
+# PyBullet temp files
+*.bullet
+gemini/
