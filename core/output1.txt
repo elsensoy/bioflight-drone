@@ -1,0 +1,49 @@
+Initializing network with size: 24
+Initialized HopfieldNetworkPyTorch on device: cpu
+
+--- Training Network ---
+Training complete. Stored 4 patterns.
+
+===== Simulation Cycle 1 =====
+
+--- Simulating Input Cue ---
+Selected cue: 'glide_noisy'
+
+--- Attempting Recognition ---
+Recall initiated (max_steps=50)...
+Converged after 3 steps.
+Recall process converged in 3 steps.
+Identified pattern name: 'glide'
+
+--- Executing Decision ---
+Decision: Initiate 'glide' behavior.
+
+===== Simulation Cycle 2 =====
+
+--- Simulating Input Cue ---
+Selected cue: 'glide_noisy'
+
+--- Attempting Recognition ---
+Recall initiated (max_steps=50)...
+Converged after 3 steps.
+Recall process converged in 3 steps.
+Identified pattern name: 'glide'
+
+--- Executing Decision ---
+Decision: Initiate 'glide' behavior.
+
+===== Simulation Cycle 3 =====
+
+--- Simulating Input Cue ---
+Selected cue: 'turn_noisy'
+
+--- Attempting Recognition ---
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+Recall process converged in 2 steps.
+Identified pattern name: 'turn'
+
+--- Executing Decision ---
+Decision: Initiate 'turn' behavior.
+
+Simulation finished.

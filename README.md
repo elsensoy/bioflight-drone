@@ -1,16 +1,18 @@
 
 # BioFlight-Drone
 
-This is an in progress bio-inspired machine learning project that mimics the energy-efficient flight behavior of biological creatures (e.g., birds) using energy-based models, Hopfield networks, Riemannian geometry, and physics-informed simulation. The system enables drones to learn, remember, and execute efficient behaviors by minimizing potential energy usage, drawing parallels to concepts like protein folding and natural flight evolution.
+This is an in progress bio-inspired machine learning project that mimics the energy-efficient flight behavior of birds using energy-based models, Hopfield networks, Riemannian geometry, and physics-informed simulation. The system enables drones to learn, remember, and execute efficient behaviors by minimizing potential energy usage, drawing parallels to concepts like protein folding and natural flight evolution.
 
 ---
+[BioFlight-Drone](hopfield_test_pybullet.png)
+
 
 
 ## Introduction & Motivation
 
-The flight behavior of birds reflects millions of years of evolutionary optimization, resulting in motion patterns that are neither random nor brute-forced, but instead governed by the principles of **physics**, **thermodynamics**, and **behavioral memory**. These creatures conserve energy through highly efficient maneuvers, adapting dynamically to environmental conditions while minimizing energetic cost. Inspired by this, **BioFlight-Drone** proposes a learning framework in which an autonomous aerial agent acquires and executes biologically plausible behaviors through energy-aware decision-making.
+The flight behavior of birds reflects millions of years of evolutionary optimization, resulting in motion patterns that are neither random nor brute-forced, but instead governed by the principles of **physics**, **thermodynamics**, and **behavioral memory**. Birds conserve energy through highly efficient maneuvers, adapting dynamically to environmental conditions while minimizing energetic cost. Inspired by this, **BioFlight-Drone** proposes a learning framework in which an autonomous aerial agent acquires and executes biologically plausible behaviors through energy-aware decision-making.
 
-Rather than relying on conventional optimization techniques, this system employs **Hopfield networks** to encode and recall idealized motion patterns as **attractor states** within a dynamic energy landscape. These memory representations are complemented by **Energy-Based Models (EBMs)** that evaluate the energetic cost of possible actions, integrating both internal hardware constraints and external environmental factors. Grounded in the **Second Law of Thermodynamics**, the drone's behavioral evolution is framed as a continuous descent toward **stable, low-energy configurations**, analogous to **protein folding**, which naturally converges to energetically favorable structures without exhaustive search.
+Rather than relying on conventional optimization techniques, this system employs **Hopfield networks** to encode and recall idealized motion patterns as **attractor states** within a dynamic energy landscape. These memory representations are complemented by **Energy-Based Models (EBMs)** that evaluate the energetic cost of possible actions, integrating both internal hardware constraints and external environmental factors. Grounded in the **Second Law of Thermodynamics**, the drone's behavioral evolution is framed as a continuous descent toward **stable, low-energy configurations**.
 
 This approach enables the drone not merely to imitate biological motion, but to embody the **physical intelligence of nature**, selecting actions that align with the intrinsic constraints of its environment and design. The result is a system that learns to fly not just like a bird — but in the way **physics dictates an efficient agent should**.
 
@@ -22,7 +24,7 @@ This approach enables the drone not merely to imitate biological motion, but to 
 
 -   **Hopfield Networks:** For storing and recalling stable behavioral patterns (e.g., glide, flap, turn) as memory attractors.
 -   **Energy-Based Models (EBMs):** For predicting optimal actions and evaluating trajectory efficiency based on a composite energy function.
--   **Riemannian Geometry:** Using libraries like [CUSP](https://github.com/karish-grover/cusp) to analyze the 'shape' and similarity of motion trajectories on product manifolds.
+-   **Riemannian Geometry:** We use libraries like [CUSP](https://github.com/karish-grover/cusp) to analyze the 'shape' and similarity of motion trajectories on product manifolds.
 -   **Lyapunov-based Stability Analysis:** To ensure learned control policies converge to stable, energy-efficient states.
 -   **Physics Simulation:** Utilizing environments like `gym-pybullet-drones` and potentially `AirSim` for realistic drone-environment interaction.
 
@@ -33,11 +35,10 @@ This approach enables the drone not merely to imitate biological motion, but to 
 -   Mimic bird flight behavior using data-driven memory models (Hopfield Networks).
 -   Minimize drone energy consumption through bio-physical learning principles (EBMs).
 -   Simulate complex drone-environment interactions using realistic physics engines (PyBullet, AirSim).
--   Incorporate Riemannian geometry to understand and leverage the underlying structure (shape, curvature) of drone motion.
+-   Incorporate Riemannian geometry to understand and leverage the underlying structure (shape, curvature) of drone motion. (Objects follow geodesics in curved spacetime)
 -   Develop control strategies with provable stability guarantees using Lyapunov theory.
 
-![BioFlight-Drone Low-Level Diagram](imgs/poly-img1.png)
-
+!
 
 ##  Mathematical Foundation
 
