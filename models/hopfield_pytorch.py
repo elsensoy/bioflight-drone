@@ -6,13 +6,7 @@ from typing import List, Dict, Tuple, Optional, Union
 class HopfieldNetworkPyTorch:
     """
     Implements a discrete Hopfield network using PyTorch tensors.
-
-    Attributes:
-        size (int): The number of neurons in the network (dimensionality of patterns).
-        W (torch.Tensor): The weight tensor of the network. Shape: (size, size).
-        patterns (Dict[str, torch.Tensor]): A dictionary storing the learned prototype
-                                            patterns with their names/labels as tensors.
-        device (torch.device): The device (CPU or CUDA) where tensors are stored.
+    (Other methods like __init__, train, energy, identify_recalled_pattern, load_patterns_from_dict remain the same)
     """
     def __init__(self, size: int, device: Optional[Union[str, torch.device]] = None):
         """
@@ -133,7 +127,7 @@ class HopfieldNetworkPyTorch:
             input_pattern (Union[List[int], np.ndarray, torch.Tensor]): Initial state vector (-1, 1).
             max_steps (int): Maximum update iterations.
             update_rule (str): 'async' or 'sync'.
-            verbose (bool): Print updates if True.
+            verbose (bool): Print detailed updates if True.
 
         Returns:
             Tuple[torch.Tensor, List[float], bool]: Final state tensor, energy trace, convergence status.
@@ -164,6 +158,8 @@ class HopfieldNetworkPyTorch:
         if verbose:
             print(f"Recall initiated. Start Energy: {energy_trace[0]:.2f}")
             print(f"Initial State: {state.cpu().numpy().astype(int)}") # Convert for printing
+        else:
+             print(f"Recall initiated (max_steps={max_steps})...") # Indicate start
 
         for step in range(max_steps):
             prev_state = state.clone() # Important: clone the tensor
@@ -190,16 +186,26 @@ class HopfieldNetworkPyTorch:
             current_energy = self.energy(state)
             energy_trace.append(current_energy)
 
+            # --- Debug Print Added ---
+            # Print progress every 10 steps if not verbose
+            if not verbose and (step + 1) % 10 == 0:
+                print(f"  Recall step {step + 1}/{max_steps} reached...")
+            # --- End Debug Print ---
+
             if verbose:
                  print(f"Step {step + 1}: Energy={current_energy:.2f}, State={state.cpu().numpy().astype(int)}")
 
             # Check for convergence: state hasn't changed
             if torch.equal(state, prev_state):
                  converged = True
-                 if verbose: print(f"\nConverged: State stable after {step + 1} steps.")
+                 if verbose:
+                     print(f"\nConverged: State stable after {step + 1} steps.")
+                 else:
+                     print(f"Converged after {step + 1} steps.") # Print convergence even if not verbose
                  break
 
-        if not converged and verbose:
+        if not converged:
+            # This message will print if the loop finishes without convergence
             print(f"\nWarning: Did not converge within {max_steps} steps.")
 
         return state, energy_trace, converged
@@ -247,7 +253,8 @@ class HopfieldNetworkPyTorch:
              self.patterns[name] = pattern
          print(f"Loaded {len(self.patterns)} patterns into memory for identification.")
 
-# --- Example Usage (PyTorch version) ---
+
+# --- Example Usage (PyTorch version) ---keep or comment it
 if __name__ == '__main__':
     # Check if CUDA is available, otherwise use CPU
     selected_device = 'cuda' if torch.cuda.is_available() else 'cpu'

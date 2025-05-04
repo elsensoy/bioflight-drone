@@ -1,0 +1,57 @@
+Using PyTorch implementation.
+Using device: cpu
+Successfully loaded patterns from /home/elsensoy/bioflight-drone/models/data/test_inputs.json
+Detected pattern size: 24
+Initialized HopfieldNetworkPyTorch on device: cpu
+
+--- Training Network ---
+Training complete. Stored 4 patterns.
+
+--- Testing Recall ---
+
+Testing recall for: 'glide_noisy' (should recall 'glide')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [ 1 -1 -1 -1 -1  1  1  1 -1  1  1 -1  1  1  1  1  1  1 -1 -1  1  1 -1 -1]
+  Identified as: 'Unknown'
+  Result: FAILED (Expected 'glide')
+
+Testing recall for: 'flap_noisy' (should recall 'flap')
+Recall initiated (max_steps=50)...
+Converged after 3 steps.
+  Converged: True in 3 steps.
+  Final State: [ 1 -1  1  1  1 -1  1  1 -1  1 -1  1 -1  1 -1 -1 -1  1  1 -1  1 -1  1 -1]
+  Identified as: 'flap'
+  Result: SUCCESS
+
+Testing recall for: 'hover_noisy' (should recall 'hover')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [-1  1  1  1  1  1 -1  1  1 -1  1 -1 -1  1 -1 -1 -1 -1  1  1 -1 -1 -1  1]
+  Identified as: 'hover'
+  Result: SUCCESS
+
+Testing recall for: 'turn_noisy' (should recall 'turn')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [ 1 -1 -1 -1 -1  1  1  1 -1 -1  1 -1  1  1 -1 -1  1  1 -1  1  1 -1 -1  1]
+  Identified as: 'turn'
+  Result: SUCCESS
+
+--- Recall Test Summary ---
+Total noisy patterns tested: 4
+Successful recalls: 3
+Success rate: 75.00%
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ 
+
+
+EVALUATE:
+
+Results:
+The results show a 75% success rate with the larger pattern size (N=24), a significant improvement from the 25% you got with N=8.
+
+flap, hover, and turn were recalled correctly.
+glide_noisy failed, converging to an "Unknown" state.

@@ -1,0 +1,11 @@
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ python models/test_inputs.py
+Generating 4 patterns of size 24...
+Generated 'glide': [-1, -1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, -1, -1]
+Generated 'flap': [1, -1, 1, 1, 1, -1, 1, 1, -1, 1, -1, 1, -1, 1, -1, -1, -1, 1, 1, -1, 1, -1, 1, -1]
+Generated 'hover': [-1, 1, 1, 1, 1, 1, -1, 1, 1, -1, 1, -1, -1, 1, -1, -1, -1, -1, 1, 1, -1, -1, -1, 1]
+Generated 'turn': [1, -1, -1, -1, -1, 1, 1, 1, -1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, -1, -1, 1]
+
+Successfully saved 8 patterns (clean and noisy) to data/test_inputs.json
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ 
+
+

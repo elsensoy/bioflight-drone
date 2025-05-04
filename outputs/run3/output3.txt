@@ -1,0 +1,49 @@
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ python training/train_memory.py
+Using PyTorch implementation.
+Using device: cpu
+Successfully loaded patterns from /home/elsensoy/bioflight-drone/data/test_inputs.json
+Detected pattern size: 24
+Initialized HopfieldNetworkPyTorch on device: cpu
+
+--- Training Network ---
+Training complete. Stored 4 patterns.
+
+--- Testing Recall ---
+
+Testing recall for: 'glide_noisy' (should recall 'glide')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [ 1 -1 -1 -1 -1  1  1  1 -1 -1  1 -1  1  1  1  1  1  1 -1  1  1  1 -1  1]
+  Identified as: 'Unknown'
+  Result: FAILED (Expected 'glide')
+
+Testing recall for: 'flap_noisy' (should recall 'flap')
+Recall initiated (max_steps=50)...
+Converged after 3 steps.
+  Converged: True in 3 steps.
+  Final State: [ 1 -1  1  1  1 -1  1  1 -1  1 -1  1 -1  1 -1 -1 -1  1  1 -1  1 -1  1 -1]
+  Identified as: 'flap'
+  Result: SUCCESS
+
+Testing recall for: 'hover_noisy' (should recall 'hover')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [-1  1  1  1  1  1 -1  1  1 -1  1 -1 -1  1 -1 -1 -1 -1  1  1 -1 -1 -1  1]
+  Identified as: 'hover'
+  Result: SUCCESS
+
+Testing recall for: 'turn_noisy' (should recall 'turn')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [-1 -1 -1  1  1  1  1  1 -1  1  1 -1  1  1  1  1  1 -1  1 -1  1  1 -1 -1]
+  Identified as: 'glide'
+  Result: FAILED (Expected 'turn')
+
+--- Recall Test Summary ---
+Total noisy patterns tested: 4
+Successful recalls: 2
+Success rate: 50.00%
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ 

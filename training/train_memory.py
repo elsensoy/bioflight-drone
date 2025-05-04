@@ -6,14 +6,14 @@ import os
 import sys
 from typing import Dict, List, Tuple
 
-# --- Configuration ---
+#  Configuration 
  
 script_dir = os.path.dirname(__file__)
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-# Choose which implementation to use ('pytorch' or 'numpy')
-IMPLEMENTATION = 'pytorch' # or 'numpy'
+
+IMPLEMENTATION = 'pytorch' 
 
 if IMPLEMENTATION == 'pytorch':
     try:
@@ -39,7 +39,7 @@ else:
     sys.exit(1)
 
 
-PATTERNS_FILE = os.path.join(parent_dir, "models/data", "test_inputs.json")
+PATTERNS_FILE = os.path.join(parent_dir, "data", "test_inputs.json")
 MAX_RECALL_STEPS = 50
 RECALL_UPDATE_RULE = 'async' # 'async' or 'sync'
 VERBOSE_RECALL = False # Set to True for detailed step-by-step recall output
@@ -73,7 +73,7 @@ def plot_energy_trace(energy_trace: List[float], title: str):
     plt.tight_layout()
     plt.show()
 
-# --- Main Training and Testing ---
+#  Main Training and Testing 
 
 if __name__ == "__main__":
     # 1. Load patterns
@@ -150,13 +150,13 @@ if __name__ == "__main__":
         else:
             print(f"  Result: FAILED (Expected '{original_key}')")
 
-        # 4. Visualize Energy (only for the first test case)
+        # 4. Visualize energy (only for the first test case)
         if not first_plot_done and energy_trace:
             plot_title = f"Energy Evolution for '{noisy_key}' Recall ({RECALL_UPDATE_RULE.capitalize()} Update)"
             plot_energy_trace(energy_trace, plot_title)
             first_plot_done = True
 
-    # --- Report Summary ---
+    #  Report summary
     print("\n--- Recall Test Summary ---")
     if total_tests > 0:
         success_rate = (successful_recalls / total_tests) * 100

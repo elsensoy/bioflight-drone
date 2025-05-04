@@ -1,0 +1,39 @@
++Created a larger test case.
++Plots generated
++GPU shift might be needed. Maybe I will use this computer's GPU. Considering it cuz training with 24 N  will not be fun otherwise.
+
+Today's focus:
+A Hopfield network of size N (number of neurons) can reliably store roughly 0.14 * N patterns. 
+When N=8, so the theoretical capacity is only about 0.14 * 8 ≈ 1.12 patterns. Trying to store 4 patterns (glide, flap, hover, turn) in a network of size 8 severely overloads its capacity. 
+The energy landscape becomes too complex with many spurious minima, and the basins of attraction for the correct patterns get distorted or shrink.
+Question unrelated: why 0.14?
+
+is this a specific number to hebbian models?
+ \(0.14\) \(\ln (0.14)\approx -1.9661\)       
+
+
+ output for when N=24:
+ --- Testing Recall ---
+
+Testing recall for: 'glide_noisy' (should recall 'glide')
+Recall initiated (max_steps=50)...
+Converged after 2 steps.
+  Converged: True in 2 steps.
+  Final State: [ 1 -1 -1 -1 -1  1  1  1 -1  1  1 -1  1  1  1  1  1  1 -1 -1  1  1 -1 -1]
+  Identified as: 'Unknown'
+  Result: FAILED (Expected 'glide')
+(....)
+
+--- Recall Test Summary ---
+Total noisy patterns tested: 4
+Successful recalls: 3
+Success rate: 75.00%
+(bioflight) elsensoy@LAPTOP-A3TOJAME:~/bioflight-drone$ 
+
+Results:
+The results show a 75% success rate with the larger pattern size (N=24), a significant improvement from the 25% you got with N=8.
+
+flap, hover, and turn were recalled correctly.
+glide_noisy failed, converging to an "Unknown" state.
+
+PHASE 1 AND 2 ARE COMPLETED.
