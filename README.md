@@ -1,7 +1,7 @@
 
-# BioFlight-Drone (drone_poly)
+# BioFlight-Drone
 
-**BioFlight-Drone** is an in progress bio-inspired machine learning system that mimics the energy-efficient flight behavior of biological creatures (e.g., birds) using energy-based models, Hopfield networks, Riemannian geometry, and physics-informed simulation. The system enables drones to learn, remember, and execute efficient behaviors by minimizing potential energy usage, drawing parallels to concepts like protein folding and natural flight evolution.
+This is an in progress bio-inspired machine learning project that mimics the energy-efficient flight behavior of biological creatures (e.g., birds) using energy-based models, Hopfield networks, Riemannian geometry, and physics-informed simulation. The system enables drones to learn, remember, and execute efficient behaviors by minimizing potential energy usage, drawing parallels to concepts like protein folding and natural flight evolution.
 
 ---
 
@@ -367,7 +367,6 @@ start_bioflight
 
 ---
 
-# Congratulations!
 You're now ready to work on **BioFlight-Drone** — training Hopfield networks, energy-based models, and simulating drone flights!
 
 ---
@@ -386,7 +385,7 @@ python training/train_memory.py
 
 ### 2. Train the Energy-Based Model
 
-Train the EBM using synthetic or real trajectory data (ensure data is available in `data/`).
+Train the EBM using synthetic trajectory data.
 
 ```bash
 python training/train_energy_model.py
@@ -399,7 +398,6 @@ Launch the drone simulation using the learned agent policy in the PyBullet envir
 ```bash
 python simulation/pybullet_wrapper.py
 ```
-*(Note: This might require `main.py` or a specific run script depending on your final implementation)*
 
 ---
 
@@ -428,7 +426,7 @@ if torch.cuda.is_available():
 
 -   **CUDA Toolkit:** Necessary for GPU computation. Version should match PyTorch build.
 -   **cuDNN:** Optimized library for deep neural network primitives.
--   **NCCL:** For efficient multi-GPU communication (if using distributed training).
+-   **NCCL:** For efficient multi-GPU communication  
 -   **NVIDIA Driver:** Ensure you have a compatible driver installed.
 
 ### Docker for Reproducibility
@@ -437,7 +435,7 @@ A `Dockerfile` is provided for building a containerized environment with GPU sup
 
 ```Dockerfile
 # Use an official NVIDIA CUDA base image matching your PyTorch CUDA version
-# Example: PyTorch for CUDA 12.1
+# For example: PyTorch for CUDA 12.1
 FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
 
 # Avoid prompts during package installation
@@ -494,19 +492,7 @@ Current and planned experiments include:
 -   Classifying different drone flight phases (e.g., takeoff, hover, glide, landing) using Riemannian GNNs on trajectory data.
 -   Evaluating the energy efficiency of the learned controller compared to baseline controllers or ground-truth bird data.
 -   Testing the stability and robustness of drone behaviors governed by Lyapunov-stable control modules.
--   Comparing performance in PyBullet vs. higher-fidelity simulators like AirSim or Isaac Sim.
-
----
-
-## Future Work & Directions
-
--   **Integrate Real-World Data:** Incorporate GPS and motion capture data from actual birds or highly realistic drone flights.
--   **Online Adaptation:** Develop mechanisms for neuroplasticity in the Hopfield memory or adaptive EBMs to allow the drone to learn new behaviors online.
--   **Advanced Simulation:** Fully integrate with AirSim or NVIDIA Isaac Sim for photorealistic rendering and complex sensor simulation (e.g., camera-based imitation learning).
--   **Model-Free Lyapunov Control:** Explore learning controllers with stability guarantees directly from data using techniques like Control Barrier Functions (CBFs) learned via RL.
--   **Hardware Implementation:** Test the developed algorithms on physical drone hardware.
--   **Self-Organizing Dynamics:** Investigate how complex, coordinated behaviors can emerge from the interaction of these components, potentially leveraging manifold embeddings.
--   **Adaptive Control:** Design control systems that explicitly adapt to changing environmental conditions using Riemannian geometry insights.
+-   Comparing performance in PyBullet 
 
 ---
 
