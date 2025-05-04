@@ -4,7 +4,7 @@
 This is an in progress bio-inspired machine learning project that mimics the energy-efficient flight behavior of birds using energy-based models, Hopfield networks, Riemannian geometry, and physics-informed simulation. The system enables drones to learn, remember, and execute efficient behaviors by minimizing potential energy usage, drawing parallels to concepts like protein folding and natural flight evolution.
 
 ---
-[BioFlight-Drone](hopfield_test_pybullet.png)
+[BioFlight-Drone](core/hopfield_test_pybullet.png)
 
 
 
@@ -38,7 +38,7 @@ This approach enables the drone not merely to imitate biological motion, but to 
 -   Incorporate Riemannian geometry to understand and leverage the underlying structure (shape, curvature) of drone motion. (Objects follow geodesics in curved spacetime)
 -   Develop control strategies with provable stability guarantees using Lyapunov theory.
 
-!
+
 
 ##  Mathematical Foundation
 
@@ -134,48 +134,45 @@ Satisfying these conditions guarantees **asymptotic stability** – the system w
 ## Project Structure
 
 ```
-bioflight-drone/
-├── main.py                 # Main execution script
-├── requirements.txt        # Python dependencies
-├── README.md               # This file
-│
-├── config/
-│   └── config.yaml         # Configuration (hyperparameters, paths)
-│
-├── data/
-│   ├── test_inputs.json    # Sample inputs for Hopfield testing
-│   └── bird_behavior_dataset/ # Placeholder for real/synthetic data
-│
-├── models/
-│   ├── __init__.py
-│   ├── hopfield.py         # Hopfield network implementation
-│   ├── energy_model.py     # Energy-Based Model implementation
-│   └── riemannian_net.py   # Riemannian GNN (using CUSP)
-│
-├── agents/
-│   ├── __init__.py
-│   └── drone_agent.py      # Drone control logic
-│
-├── simulation/
-│   ├── __init__.py
-│   ├── pybullet_wrapper.py # Interface for PyBullet sim
-│   ├── airsim_interface.py # Interface for AirSim (optional)
-│   └── mock_env.py         # Simple test environment
-│
-├── training/
-│   ├── __init__.py
-│   ├── train_energy_model.py # Script to train EBM
-│   ├── train_memory.py     # Script to train Hopfield memory
-│   └── evaluate.py         # Evaluation scripts and metrics
-│
-├── utils/
-│   ├── __init__.py
-│   ├── data_loader.py      # Data loading utilities
-│   └── visualizer.py       # Plotting and animation tools
-│
-└── external/
-    ├── gym-pybullet-drones/ # Git submodule for the PyBullet drone env
-    └── cusp/                # Git submodule for Spectro-Riemannian GNNs
+├── README.md
+├── agents
+│   └── drone_agent.py
+├── bioflight-drone
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── data
+│   │   └── behavior_patterns.json
+│   ├── docker-compose.yaml
+│   ├── gpu_test.py
+│   ├── main.py
+│   └── utils.py
+├── config
+│   └── config.yaml
+├── core
+│   ├── decision_module.py
+│   ├── hopfield_test_pybullet.png
+│   ├── output1.txt
+│   ├── pybullet_simulation.py
+│   └── pybullet_simulation_test.py
+├── data
+├── math
+├── models
+│   ├── energy_model.py
+│   ├── hopfield_pytorch.py
+│   ├── riemannian_net.py
+│   └── test_inputs.py
+├── requirements.txt
+├── simulation
+│   └── airsim_interface.py
+├── training
+│   ├── evaluate.py
+│   ├── train_energy_model.py
+│   └── train_memory.py
+├── urdfs
+└── utils
+    ├── data_loader.py
+    └── visualizer.py
+
 ```
 
 ---

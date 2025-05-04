@@ -6,23 +6,19 @@ import sys
 import random
 from typing import Dict, List, Any, Tuple
 
-# --- Configuration ---
+# Configuration 
 # Use absolute paths for robustness
 script_path = os.path.abspath(__file__)
 script_dir = os.path.dirname(script_path) # e.g., /path/to/bioflight-drone/core
 project_root = os.path.dirname(script_dir) # e.g., /path/to/bioflight-drone
 
-# Add project root to Python path to allow importing 'models'
 sys.path.append(project_root)
-
-# Construct the absolute path to the patterns file
 PATTERNS_FILE = os.path.join(project_root, "data", "test_inputs.json")
 
 # Hopfield Network Configuration
 MAX_RECALL_STEPS = 50
 RECALL_UPDATE_RULE = 'async' # 'async' or 'sync'
-
-# --- Import Hopfield Network ---
+#import hopfield
 try:
     from models.hopfield_pytorch import HopfieldNetworkPyTorch as HopfieldNetwork
     print("Using PyTorch implementation.")
@@ -31,14 +27,13 @@ except ImportError:
     print(f"Attempted to import from: {os.path.join(project_root, 'models', 'hopfield_pytorch.py')}")
     sys.exit(1)
 
-# Check for CUDA availability
+# Check for cuda availability
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f"Using device: {DEVICE}")
 
-# --- Helper Functions ---
+#  Helper Functions 
 
 def load_patterns(filepath: str) -> Dict[str, List[int]]:
-    """Loads patterns from a JSON file."""
     print(f"Attempting to load patterns from: {filepath}")
     try:
         with open(filepath, 'r') as f:
@@ -63,7 +58,7 @@ def initialize_and_train_network(clean_patterns: Dict[str, List[int]]) -> Hopfie
     print(f"Initializing network with size: {pattern_size}")
     network = HopfieldNetwork(size=pattern_size, device=DEVICE)
 
-    print("\n--- Training Network ---")
+    print("\n Training Network ")
     network.train(clean_patterns)
     return network
 
@@ -86,17 +81,17 @@ def recognize_behavior(network: HopfieldNetwork, cue_pattern: List[int]) -> str:
     # Prepare input pattern (convert to tensor)
     input_pattern_tensor = torch.tensor(cue_pattern, dtype=torch.float32, device=DEVICE)
 
-    # Perform recall (verbose=False for cleaner output in this script)
+    # Perform recall (verbose=False for cleaner output)
     final_state, energy_trace, converged = network.recall(
         input_pattern_tensor,
         max_steps=MAX_RECALL_STEPS,
         update_rule=RECALL_UPDATE_RULE,
-        verbose=False # Keep this false for cleaner decision output
+        verbose=False 
     )
 
     if not converged:
         print("Warning: Recall did not converge.")
-        # Decide how to handle non-convergence (e.g., return 'Unknown' or raise error)
+        # TODO: how to handle non-convergence (e.g., return 'Unknown' or raise error)
 
     # Identify the recalled pattern
     identified_pattern_name = network.identify_recalled_pattern(final_state)
@@ -113,7 +108,7 @@ def execute_behavior(recognized_behavior: str):
         # based on the 'recognized_behavior' string.
     else:
         print("Decision: Input cue not recognized. Maintain current state or default behavior.")
-        # Handle unrecognized input
+        # TODO: Handle unrecognized input
 
 # --- Main Simulation Loop ---
 

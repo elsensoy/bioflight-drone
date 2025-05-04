@@ -54,3 +54,5 @@ external/*/__pycache__/
 # PyBullet temp files
 *.bullet
 gemini/
+notes/
+outputs/

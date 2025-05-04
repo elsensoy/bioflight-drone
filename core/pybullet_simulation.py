@@ -1,6 +1,6 @@
 # core/pybullet_simulation.py
 import json
-import torch # Uncommented
+import torch  
 import os
 import sys
 import random
@@ -12,18 +12,16 @@ from typing import Dict, List, Tuple
 # Configuration 
 # Use absolute paths for robustness
 script_path = os.path.abspath(__file__)
-script_dir = os.path.dirname(script_path) # e.g., /path/to/bioflight-drone/core
-project_root = os.path.dirname(script_dir) # e.g., /path/to/bioflight-drone
+script_dir = os.path.dirname(script_path) # /path/to/bioflight-drone/core
+project_root = os.path.dirname(script_dir) #  /path/to/bioflight-drone
 
 # Add project root to Python path to allow importing 'models'
 sys.path.append(project_root)
-
-# Construct the absolute path to the patterns file
 PATTERNS_FILE = os.path.join(project_root, "data", "test_inputs.json")
 
 # Hopfield Network Configuration
 MAX_RECALL_STEPS = 50
-RECALL_UPDATE_RULE = 'async' # 'async' or 'sync'
+RECALL_UPDATE_RULE = 'async'  
 
 # PyBullet Configuration
 SIMULATION_DURATION_SEC = 15 # Run for 15 seconds
@@ -48,7 +46,7 @@ except ImportError:
     print(f"Attempted to import from: {os.path.join(project_root, 'models', 'hopfield_pytorch.py')}")
     sys.exit(1)
 
-# Check for CUDA availability
+# Check for CUDA  
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f"Using device: {DEVICE}")
 
@@ -100,7 +98,7 @@ def recognize_behavior(network: HopfieldNetwork, cue_pattern: List[int]) -> str:
         input_pattern_tensor,
         max_steps=MAX_RECALL_STEPS,
         update_rule=RECALL_UPDATE_RULE,
-        verbose=False # Keep verbose false for cleaner output
+        verbose=False 
     )
     if not converged: print("Warning: Recall did not converge.")
     identified_pattern_name = network.identify_recalled_pattern(final_state)
@@ -108,8 +106,7 @@ def recognize_behavior(network: HopfieldNetwork, cue_pattern: List[int]) -> str:
     print(f"Identified pattern name: '{identified_pattern_name}'")
     return identified_pattern_name
 
-# PyBullet Action Placeholders 
-# These will just print messages now
+# TODO: PyBullet Action Placeholders 
 
 def glide_action(drone_id):
     pass
@@ -184,7 +181,8 @@ if __name__ == "__main__":
          sys.exit(1)
 
     try:
-        # Load the URDF. Ensure mesh files (like .obj) are in the same directory (urdfs/)
+        # Load the URDF. Ensure mesh files (like .obj) are in the same directory (urdfs/). 
+        #If not, manually add them https://github.com/bulletphysics/bullet3/tree/master/data/Quadrotor
         modelId = p.loadURDF(MODEL_URDF_FULL_PATH, MODEL_START_POS, MODEL_START_ORN)
         print(f"Model '{TEST_URDF_FILENAME}' loaded with ID: {modelId}")
     except p.error as e:
@@ -198,13 +196,13 @@ if __name__ == "__main__":
     last_cue_time = start_time - CUE_TRIGGER_INTERVAL_SEC # Trigger first cue immediately
     current_behavior = "Unknown" # Track the last recognized behavior
 
-    print("\n--- Starting Simulation Loop (GUI mode) ---")
+    print("\n Starting Simulation Loop (GUI mode) ")
     step_count = 0
     try:
         while (time.time() - start_time) < SIMULATION_DURATION_SEC:
             current_time = time.time()
 
-            # --- Hopfield Decision Logic (Trigger periodically) ---
+            # Hopfield Decision Logic (Trigger periodically) 
             if current_time - last_cue_time >= CUE_TRIGGER_INTERVAL_SEC:
                 last_cue_time = current_time
                 try:
@@ -217,11 +215,11 @@ if __name__ == "__main__":
                     current_behavior = "Unknown" # Default if error
                     print(f"Decision: Applying '{current_behavior}' action.")
 
-            # --- Execute Behavior in PyBullet (Placeholders) ---
-            # This calls the empty placeholder functions
+            #  Execute Behavior in PyBullet (Placeholders) 
+            # empty for now
             execute_behavior(current_behavior, modelId)
 
-            # --- Step Simulation ---
+            # --- Step Simulation 
             p.stepSimulation()
             step_count += 1
 
@@ -235,14 +233,14 @@ if __name__ == "__main__":
 
     except Exception as e:
         # Catch potential exceptions during the loop
-        print(f"\n--- Exception during simulation loop ---")
+        print(f"\n Exception during simulation loop ")
         print(f"Error: {e}")
         import traceback
         traceback.print_exc() 
 
     finally:
         # 5. Cleanup
-        print(f"\n--- Simulation Finished (Ran {step_count} steps) ---")
+        print(f"\n Simulation Finished (Ran {step_count} steps)")
         print("Disconnecting PyBullet...")
         try:
             p.disconnect()
