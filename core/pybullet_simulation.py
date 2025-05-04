@@ -14,6 +14,7 @@ from typing import Dict, List, Tuple
 script_path = os.path.abspath(__file__)
 script_dir = os.path.dirname(script_path) # /path/to/bioflight-drone/core
 project_root = os.path.dirname(script_dir) #  /path/to/bioflight-drone
+trajectory_log = []
 
 # Add project root to Python path to allow importing 'models'
 sys.path.append(project_root)
@@ -108,20 +109,31 @@ def recognize_behavior(network: HopfieldNetwork, cue_pattern: List[int]) -> str:
 
 # TODO: PyBullet Action Placeholders 
 
+def set_velocity(drone_id, linear: Tuple[float, float, float], angular: Tuple[float, float, float] = (0, 0, 0)):
+    """Sets the base linear and angular velocity of the drone."""
+    p.resetBaseVelocity(drone_id, linearVelocity=linear, angularVelocity=angular)
+
 def glide_action(drone_id):
-    pass
+    """Move forward gently while descending slightly."""
+    set_velocity(drone_id, linear=(0.0, 0, -0.5))
 
 def flap_action(drone_id):
-    pass
+    """Flap: simulate sharp vertical lift with minor oscillation."""
+    t = time.time()
+    vertical_lift = 0.5 + 0.4 * (random.random() - 0.5) 
+    set_velocity(drone_id, linear=(0, 0, vertical_lift))
 
 def hover_action(drone_id):
-    pass
+    """Maintain position with gentle upward correction."""
+    set_velocity(drone_id, linear=(0, 0, 0.3))  # counteract gravity gently
 
 def turn_action(drone_id):
-    pass
+    """Rotate in place while maintaining altitude."""
+    set_velocity(drone_id, linear=(0, 0, 0.2), angular=(0, 0, 2.0))
 
 def unknown_action(drone_id):
-    pass
+    """Failsafe: try to stabilize if the behavior is unrecognized."""
+    set_velocity(drone_id, linear=(0, 0, 0))
 
 ACTION_MAP = {
     "glide": glide_action,
@@ -136,6 +148,17 @@ def execute_behavior(recognized_behavior: str, drone_id: int):
     action_function = ACTION_MAP.get(recognized_behavior, unknown_action)
     action_function(drone_id) # Call the placeholder function
 
+def log_drone_state(drone_id, timestamp):
+    """Logs the current state of the drone."""
+    pos, orn = p.getBasePositionAndOrientation(drone_id)
+    lin_vel, ang_vel = p.getBaseVelocity(drone_id)
+    trajectory_log.append({
+        "timestamp": timestamp,
+        "position": pos,
+        "orientation": orn,
+        "linear_velocity": lin_vel,
+        "angular_velocity": ang_vel
+    })
 
 # Main Simulation Setup and Loop 
 
@@ -153,7 +176,7 @@ if __name__ == "__main__":
 
     # 3. Initialize PyBullet
     print("Initializing PyBullet in GUI mode...")
-    physicsClient = p.connect(p.GUI) # < Switched back to GUI mode
+    physicsClient = p.connect(p.GUI) # Switched back to GUI mode
     # physicsClient = p.connect(p.DIRECT)
     print("Setting search path (for plane.urdf)...")
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -221,9 +244,11 @@ if __name__ == "__main__":
 
             # --- Step Simulation 
             p.stepSimulation()
+            log_drone_state(modelId, time.time() - start_time)
+
             step_count += 1
 
-            # Optional: Print progress periodically (less frequent in DIRECT mode)
+            # Print progress periodically (less frequent in DIRECT mode)
             # if step_count % (240 * 5) == 0: # Print every 5 seconds
             #      print(f"Simulation step {step_count}...")
 
@@ -248,3 +273,10 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Exception during PyBullet disconnect: {e}")
 
+        output_path = os.path.join(project_root, "data", "trajectory_log.json")
+        try:
+            with open(output_path, 'w') as f:
+                json.dump(trajectory_log, f, indent=2)
+            print(f"Trajectory log saved to: {output_path}")
+        except Exception as e:
+            print(f"Failed to save trajectory log: {e}")

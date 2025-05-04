@@ -1,0 +1,20 @@
+What is the Levi-Civita Connection, Intuitively?
+The Levi-Civita connection tells how to differentiate vectors in curved space so that your math respects:
+
+The geometry of the space (it preserves the metric).
+
+The natural flow of motion (it’s torsion-free, i.e., doesn’t introduce artificial “twisting”).
+
+This is the tool that lets you:
+
+Compute covariant derivatives (i.e., how a drone’s velocity or orientation changes along a curved trajectory).
+
+Define acceleration and geodesics correctly.
+
+Perform parallel transport, which is critical for synchronized yet decentralized motion.
+
+
+
+https://en.wikipedia.org/wiki/Riemannian_manifold#Examples
+
+see levi Civita
