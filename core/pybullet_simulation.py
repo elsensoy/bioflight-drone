@@ -115,7 +115,7 @@ def set_velocity(drone_id, linear: Tuple[float, float, float], angular: Tuple[fl
 
 def glide_action(drone_id):
     """Move forward gently while descending slightly."""
-    set_velocity(drone_id, linear=(0.0, 0, -0.5))
+    set_velocity(drone_id, linear=(0.2, 0, 0.3))
 
 def flap_action(drone_id):
     """Flap: simulate sharp vertical lift with minor oscillation."""

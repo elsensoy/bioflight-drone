@@ -7,9 +7,10 @@
         Implementation: This likely needs a neural network (MLP or CNN mentioned). Use PyTorch. Define the network architecture. Input could be state, action, environmental context. Output is the predicted energy scalar.
         Training: Use training/train_energy_model.py. Requires a dataset of (state, action, context) -> energy tuples. This data might come from simulation logs or physics calculations. Decide how to calculate/estimate Ebehavior​, Ehardware​, Eenvironment​ for the training data. Ebehavior​ might use the Hopfield network's energy or distance to attractors. Ehardware​ needs physics-based estimates (motor power, battery). Eenvironment​ needs simulation data (wind, etc.).
     Step 3: Simulation Interface (simulation/pybullet_wrapper.py):
-        Goal: Interact with gym-pybullet-drones.
-        Implementation: Create a class that wraps the Gym environment. Methods needed: reset(), step(action), get_state(), render(). Extract relevant state information (position, velocity, orientation, angular rates). Define the action space (e.g., motor thrusts).
         Testing: Run simulation/pybullet_wrapper.py (or a dedicated test script) to ensure the drone can be loaded, controlled with basic actions, and state information can be retrieved.
+ 
+ 
+ 
     Step 4: Riemannian Geometry (models/riemannian_net.py using CUSP):
         Goal: Analyze trajectory shapes on product manifolds.
         Implementation: This involves using the external/cusp library. Define the product manifold structure (M=Hd1​×Hd2​×Sd3​×Rd4​). Preprocess trajectory data (sequences of states) into a format CUSP can use (likely graph representations). Use CUSP's GNN layers within a PyTorch model. Train this model for tasks like trajectory classification or clustering.

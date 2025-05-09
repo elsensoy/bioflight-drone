@@ -32,7 +32,7 @@
             Save the trained model weights.
         Testing: Evaluate the EBM's predictions on a separate test dataset. Check if it correctly ranks actions/trajectories by their expected energy cost.
 
-Phase 2: Integration and Control
+Step 2: Integration and Control
 
     Drone Agent (agents/drone_agent.py)
         Goal: Use the trained models to select energy-efficient actions.

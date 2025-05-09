@@ -55,4 +55,4 @@ external/*/__pycache__/
 *.bullet
 gemini/
 notes/
-outputs/
+# outputs/
