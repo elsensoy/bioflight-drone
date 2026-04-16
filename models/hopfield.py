@@ -3,7 +3,7 @@ import torch
 import numpy as np # Still useful for numpy arrays in dicts initially if needed
 from typing import List, Dict, Tuple, Optional, Union
 
-class HopfieldNetworkPyTorch:
+class HopfieldNetwork:
     """
     Implements a discrete Hopfield network using PyTorch tensors.
     (Other methods like __init__, train, energy, identify_recalled_pattern, load_patterns_from_dict remain the same)

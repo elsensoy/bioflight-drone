@@ -1,0 +1,5 @@
+This is a great evolutionary step for the project. Moving from a script that "maps patterns" to a Robot/Agent architecture makes the system much more robust.
+
+To answer your first question: Yes, this is very similar to Ergodic Search. Ergodic control aims to make the time spent in a region proportional to the "importance" (spatial statistics) of that region. By using Riemannian Geometry and Energy landscapes, your drone isn't just following a line; it’s "covering" a manifold in a way that minimizes energy—mathematically, you are essentially performing a search over a behavioral distribution.
+
+Here is how we refactor your script into a professional Robot/Agent structure.

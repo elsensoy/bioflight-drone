@@ -12,5 +12,5 @@ pandas>=1.5
 scikit-learn>=1.2
 PyYAML>=6.0
 pyglet>=1.5
-pygame>=2.1      # (only if you actually use pygame in visualization)
-torch-geometric  # (only if you are using graph neural networks in this project)
+pygame>=2.1      
+torch-geometric   
