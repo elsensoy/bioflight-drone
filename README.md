@@ -98,6 +98,7 @@ python main_sim.py
   - [x] **Double Integrator Baseline:** Stabilizing a point-mass drone using EBMs.
   - [ ] **Riemannian Trajectory Tracking:** Using CUSP to follow geodesics on a sphere.
   - [ ] **Obstacle Avoidance:** Implementing CBFs within the CasADi solver loop.
+  - [ ] **Simulation:** Simulate with obstacles, environment noise, and physics enabled setting. (Nvidia Isaaclab.)
   - [ ] **Hardware-in-the-Loop:** Exporting learned energy weights to real drone firmware (Beta).
 
 -----
