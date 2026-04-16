@@ -10,9 +10,9 @@ The system enables drones to learn, remember, and execute efficient behaviors by
 
 ##  Core Concept: The "Thinking" Drone
 
-Unlike standard drones that blindly follow GPS waypoints, **BioFlight** uses a three-layer "brain":
+Unlike standard drones that blindly follow GPS waypoints, **BioFlight** uses a three-layer brain:
 
-1.  **The Memory (Hopfield):** Stores "ideal" flight archetypes (glide, hover, bank) as stable energy attractors.
+1.  **The Memory (Hopfield):** Stores ideal flight archetypes (glide, hover, bank) as stable energy attractors.
 2.  **The Geometry (Riemannian):** Understands the "shape" of flight on curved manifolds rather than flat 3D space.
 3.  **The Executive (MPC + CBF):** A pro-active controller that looks into the future, minimizing energy while guaranteeing safety via Control Barrier Functions.
 
@@ -21,7 +21,7 @@ Unlike standard drones that blindly follow GPS waypoints, **BioFlight** uses a t
 ##  Project Goals
 
   - **Bio-Mimicry:** Encode avian flight patterns into high-dimensional associative memory.
-  - **Energy Optimization:** Minimize battery drain by "sliding" down learned energy gradients.
+  - **Energy Optimization:** Minimize battery drain by sliding down learned energy gradients.
   - **Geometric Intelligence:** Use product manifolds ($\mathbb{H} \times \mathbb{S} \times \mathbb{R}$) to represent trajectories.
   - **Provable Safety:** Integrate Lyapunov Stability and Control Barrier Functions (CBFs) to prevent crashes.
 
@@ -44,10 +44,10 @@ $$\min_{u} \sum_{k=0}^{T} \underbrace{E_{\text{total}}(x_k, u_k)}_{\text{Energy 
 
 ### 3\. Stability & Safety (Lyapunov + CBF)
 
-To ensure the drone doesn't just "learn" to crash efficiently, we enforce:
+To ensure the drone doesn't just learn to crash efficiently, we enforce:
 
 1.  **Lyapunov Stability:** $\dot{V}(x) < 0$, ensuring convergence to the goal.
-2.  **Control Barrier Functions (CBF):** $h(x) \geq 0$, a mathematical "force field" that overrides the AI to prevent collisions with obstacles.
+2.  **Control Barrier Functions (CBF):** $h(x) \geq 0$, a mathematical force field that overrides the AI to prevent collisions with obstacles.
 
 -----
 
